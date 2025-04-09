@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { PlayCircle, RefreshCw } from 'lucide-react';
+import { VirtualKeyboard } from './VirtualKeyboard';
+import { HandVisualizer } from './HandVisualizer';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const TypingPractice: React.FC = () => {
   const { 
@@ -19,7 +22,9 @@ export const TypingPractice: React.FC = () => {
     isTypingStarted,
     currentLesson,
     resetPractice,
-    startGame
+    startGame,
+    selectedLanguage,
+    setSelectedLanguage
   } = useTyping();
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +78,19 @@ export const TypingPractice: React.FC = () => {
           </div>
           
           <div className="flex gap-3">
+            <Select 
+              value={selectedLanguage} 
+              onValueChange={(value) => setSelectedLanguage(value as 'english' | 'hindi')}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select Language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="english">English</SelectItem>
+                <SelectItem value="hindi">Hindi</SelectItem>
+              </SelectContent>
+            </Select>
+
             {isTypingStarted ? (
               <Button 
                 variant="outline" 
@@ -86,6 +104,7 @@ export const TypingPractice: React.FC = () => {
               <Button 
                 onClick={startGame}
                 className="flex items-center gap-2"
+                disabled={!currentLesson}
               >
                 <PlayCircle className="h-4 w-4" />
                 {isTypingComplete ? 'Try Again' : 'Start Typing'}
@@ -131,7 +150,7 @@ export const TypingPractice: React.FC = () => {
                   <div className="typing-text">{renderTypingText()}</div>
                 </div>
               
-                <div className="relative">
+                <div className="relative mb-8">
                   <input
                     ref={inputRef}
                     type="text"
@@ -145,6 +164,11 @@ export const TypingPractice: React.FC = () => {
                     autoCapitalize="off"
                     spellCheck="false"
                   />
+                </div>
+
+                <div className="flex flex-col items-center gap-8 mb-4">
+                  <VirtualKeyboard className="mb-4" />
+                  <HandVisualizer />
                 </div>
               </>
             )}

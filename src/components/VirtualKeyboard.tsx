@@ -1,17 +1,28 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useTyping, fingerMap, hindiKeyboardMap } from '@/contexts/TypingContext';
 
 interface VirtualKeyboardProps {
   activeKey?: string | null;
   className?: string;
 }
 
-const keyboardLayout = [
+// English keyboard layout
+const englishKeyboardLayout = [
   ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
   ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
   ['Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter'],
   ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
+  ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Fn', 'Ctrl']
+];
+
+// Hindi keyboard layout
+const hindiKeyboardLayout = [
+  ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
+  ['Tab', 'ौ', 'ै', 'ा', 'ी', 'ू', 'ब', 'ह', 'ग', 'द', 'ज', 'ड', '़', '\\'],
+  ['Caps', 'ो', 'े', '्', 'ि', 'ु', 'प', 'र', 'क', 'त', 'च', 'ट', 'Enter'],
+  ['Shift', 'ॉ', 'ं', 'म', 'न', 'व', 'ल', 'स', ',', '.', 'य', 'Shift'],
   ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Fn', 'Ctrl']
 ];
 
@@ -28,26 +39,44 @@ const keyWidths: Record<string, string> = {
   'Fn': 'w-12',
 };
 
-export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ 
-  activeKey = null,
-  className
-}) => {
+export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) => {
+  const { currentKey, typedCharacters, typingText, currentPosition, selectedLanguage } = useTyping();
+  
+  // Determine which keyboard layout to use
+  const keyboardLayout = selectedLanguage === 'english' ? englishKeyboardLayout : hindiKeyboardLayout;
+  
   return (
     <div className={cn("p-2 rounded-lg", className)}>
       <div className="flex flex-col items-center gap-1">
         {keyboardLayout.map((row, rowIndex) => (
           <div key={rowIndex} className="flex gap-1">
             {row.map((key) => {
-              const isActive = activeKey?.toLowerCase() === key.toLowerCase();
+              // For Hindi layout, find the equivalent English key for correct finger mapping
+              const englishKey = selectedLanguage === 'hindi' 
+                ? Object.entries(hindiKeyboardMap).find(([_, value]) => value === key)?.[0] || key 
+                : key;
+              
+              // Determine if this key is active (currently to be typed)
+              const isActive = currentKey?.toLowerCase() === key.toLowerCase();
+              
+              // Determine if this key has been correctly or incorrectly typed
+              const keyIndex = typingText.toLowerCase().indexOf(key.toLowerCase(), 0);
+              let keyStatus = null;
+              if (keyIndex !== -1 && keyIndex < currentPosition) {
+                keyStatus = typedCharacters[keyIndex];
+              }
+              
               const keyWidth = keyWidths[key] || 'w-10';
               
               return (
                 <div
                   key={key}
                   className={cn(
-                    "keyboard-key",
+                    "keyboard-key h-10 flex items-center justify-center rounded-md text-sm font-medium transition-colors",
                     keyWidth,
-                    isActive && "keyboard-key-active"
+                    isActive && "keyboard-key-active bg-primary/20 border-primary",
+                    keyStatus === 'correct' && "bg-green-500/20 text-green-700 border-green-500",
+                    keyStatus === 'incorrect' && "bg-red-500/20 text-red-700 border-red-500"
                   )}
                 >
                   {key === 'Space' ? '' : key}
