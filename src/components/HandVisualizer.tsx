@@ -13,148 +13,194 @@ export const HandVisualizer: React.FC = () => {
     <div className="flex justify-center gap-12 w-full max-w-4xl mx-auto">
       {/* Left Hand */}
       <div className="relative">
-        <svg width="180" height="220" viewBox="0 0 180 220" className="hand-svg">
+        <svg width="200" height="240" viewBox="0 0 200 240" className="hand-svg">
           {/* Palm */}
           <path 
-            d="M30,130 C30,150 30,170 50,190 C70,210 100,210 130,190 C150,170 150,150 150,130 L140,60 C140,60 135,40 120,40 C105,40 100,60 100,60 L100,100 L80,100 L80,40 C80,40 75,20 60,20 C45,20 40,40 40,40 L40,110 L30,130 Z" 
-            fill="#f3d3bd" 
-            stroke="#d4b49b" 
-            strokeWidth="2"
+            d="M40,150 C40,170 40,190 60,210 C80,230 110,230 140,210 C160,190 160,170 160,150 L150,80 C150,80 145,60 130,60 C115,60 110,80 110,80 L110,120 L90,120 L90,60 C90,60 85,40 70,40 C55,40 50,60 50,60 L50,120 L40,150 Z" 
+            fill="#f9d9c0" 
+            stroke="#c9b0a0" 
+            strokeWidth="1.5"
           />
           
-          {/* Pinky */}
+          {/* Pinky - Left most finger */}
           <path 
-            d="M150,130 L160,90 C162,80 160,70 150,68 C140,66 135,70 133,80 L130,130"
+            d="M160,150 L170,90 C172,80 170,70 160,67 C150,65 145,70 143,80 L140,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'left' && fingerInfo?.finger === 3 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
           {/* Ring Finger */}
           <path 
-            d="M130,130 L135,70 C137,60 130,50 120,48 C110,46 103,56 100,65 L100,130"
+            d="M140,150 L145,70 C147,60 140,50 130,47 C120,45 113,56 110,65 L110,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'left' && fingerInfo?.finger === 2 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
           {/* Middle Finger */}
           <path 
-            d="M100,130 L100,65 C100,55 95,45 80,45 C65,45 60,55 60,65 L65,130"
+            d="M110,150 L110,65 C110,55 105,45 90,45 C75,45 70,55 70,65 L75,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'left' && fingerInfo?.finger === 1 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
-          {/* Index Finger */}
+          {/* Index Finger - Right most finger on left hand */}
           <path 
-            d="M65,130 L60,80 C58,70 50,65 40,68 C30,71 28,80 30,90 L40,130"
+            d="M75,150 L70,80 C68,70 60,65 50,68 C40,71 38,80 40,90 L50,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'left' && fingerInfo?.finger === 0 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
           {/* Thumb */}
           <path 
-            d="M40,130 C20,120 10,100 15,80 C20,60 35,55 45,60 C55,65 55,70 55,80 L60,100 L40,130"
+            d="M50,150 C30,140 20,120 25,100 C30,80 45,75 55,80 C65,85 65,90 65,100 L70,120 L50,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'left' && fingerInfo?.finger === 4 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
+          
+          {/* Finger joints and details for better definition */}
+          {/* Pinky joints */}
+          <path d="M160,150 C160,140 143,137 143,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M143,130 C143,120 143,110 160,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Ring finger joints */}
+          <path d="M140,150 C140,140 110,137 110,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M110,130 C110,120 110,110 130,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Middle finger joints */}
+          <path d="M110,150 C110,140 75,137 75,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M75,130 C75,120 75,110 90,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Index finger joints */}
+          <path d="M75,150 C75,140 50,137 50,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M50,130 C50,120 50,110 60,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Fingernails */}
+          <path d="M160,80 C160,75 165,74 170,76" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M130,58 C130,53 135,52 140,54" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M90,55 C90,50 95,49 100,51" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M60,75 C60,70 65,69 70,71" fill="none" stroke="#c9b0a0" strokeWidth="1" />
         </svg>
         <div className="text-center mt-2 text-sm font-medium">Left Hand</div>
       </div>
       
       {/* Right Hand */}
       <div className="relative">
-        <svg width="180" height="220" viewBox="0 0 180 220" className="hand-svg">
+        <svg width="200" height="240" viewBox="0 0 200 240" className="hand-svg">
           {/* Palm */}
           <path 
-            d="M150,130 C150,150 150,170 130,190 C110,210 80,210 50,190 C30,170 30,150 30,130 L40,60 C40,60 45,40 60,40 C75,40 80,60 80,60 L80,100 L100,100 L100,40 C100,40 105,20 120,20 C135,20 140,40 140,40 L140,110 L150,130 Z" 
-            fill="#f3d3bd" 
-            stroke="#d4b49b" 
-            strokeWidth="2"
+            d="M160,150 C160,170 160,190 140,210 C120,230 90,230 60,210 C40,190 40,170 40,150 L50,80 C50,80 55,60 70,60 C85,60 90,80 90,80 L90,120 L110,120 L110,60 C110,60 115,40 130,40 C145,40 150,60 150,60 L150,120 L160,150 Z" 
+            fill="#f9d9c0" 
+            stroke="#c9b0a0" 
+            strokeWidth="1.5"
           />
           
-          {/* Pinky */}
+          {/* Pinky - Right most finger */}
           <path 
-            d="M30,130 L20,90 C18,80 20,70 30,68 C40,66 45,70 47,80 L50,130"
+            d="M40,150 L30,90 C28,80 30,70 40,67 C50,65 55,70 57,80 L60,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'right' && fingerInfo?.finger === 3 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
           {/* Ring Finger */}
           <path 
-            d="M50,130 L45,70 C43,60 50,50 60,48 C70,46 77,56 80,65 L80,130"
+            d="M60,150 L55,70 C53,60 60,50 70,47 C80,45 87,56 90,65 L90,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'right' && fingerInfo?.finger === 2 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
           {/* Middle Finger */}
           <path 
-            d="M80,130 L80,65 C80,55 85,45 100,45 C115,45 120,55 120,65 L115,130"
+            d="M90,150 L90,65 C90,55 95,45 110,45 C125,45 130,55 130,65 L125,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'right' && fingerInfo?.finger === 1 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
-          {/* Index Finger */}
+          {/* Index Finger - Left most finger on right hand */}
           <path 
-            d="M115,130 L120,80 C122,70 130,65 140,68 C150,71 152,80 150,90 L140,130"
+            d="M125,150 L130,80 C132,70 140,65 150,68 C160,71 162,80 160,90 L150,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'right' && fingerInfo?.finger === 0 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
           
           {/* Thumb */}
           <path 
-            d="M140,130 C160,120 170,100 165,80 C160,60 145,55 135,60 C125,65 125,70 125,80 L120,100 L140,130"
+            d="M150,150 C170,140 180,120 175,100 C170,80 155,75 145,80 C135,85 135,90 135,100 L130,120 L150,150"
             className={cn(
-              "hand-finger",
+              "hand-finger transition-all duration-300",
               fingerInfo?.hand === 'right' && fingerInfo?.finger === 4 
-                ? "fill-primary/30 stroke-primary" 
-                : "fill-[#f3d3bd] stroke-[#d4b49b]"
+                ? "fill-primary/40 stroke-primary stroke-[1.5px]" 
+                : "fill-[#f9d9c0] stroke-[#c9b0a0]"
             )}
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
+          
+          {/* Finger joints and details for better definition */}
+          {/* Pinky joints */}
+          <path d="M40,150 C40,140 57,137 57,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M57,130 C57,120 57,110 40,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Ring finger joints */}
+          <path d="M60,150 C60,140 90,137 90,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M90,130 C90,120 90,110 70,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Middle finger joints */}
+          <path d="M90,150 C90,140 125,137 125,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M125,130 C125,120 125,110 110,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Index finger joints */}
+          <path d="M125,150 C125,140 150,137 150,130" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M150,130 C150,120 150,110 140,105" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          
+          {/* Fingernails */}
+          <path d="M40,80 C40,75 35,74 30,76" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M70,58 C70,53 65,52 60,54" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M110,55 C110,50 105,49 100,51" fill="none" stroke="#c9b0a0" strokeWidth="1" />
+          <path d="M140,75 C140,70 135,69 130,71" fill="none" stroke="#c9b0a0" strokeWidth="1" />
         </svg>
         <div className="text-center mt-2 text-sm font-medium">Right Hand</div>
       </div>

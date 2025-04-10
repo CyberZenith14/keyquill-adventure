@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -14,46 +14,40 @@ import {
 } from '@/components/ui/sidebar';
 import { Lesson, useTyping } from '@/contexts/TypingContext';
 import { Keyboard, Award, BookOpen, Gamepad2, Github, PanelRightClose, Code } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type CategoryTab = {
   value: string;
   label: string;
   icon: React.ElementType;
-  difficulties: string[];
 };
 
-// Define the difficulty groupings
+// Define the category tabs
 const categoryTabs: CategoryTab[] = [
   {
     value: 'beginner',
     label: 'Beginner',
     icon: BookOpen,
-    difficulties: ['beginner']
   },
   {
     value: 'intermediate',
     label: 'Intermediate',
     icon: Award,
-    difficulties: ['intermediate']
   },
   {
     value: 'advanced',
     label: 'Advanced',
     icon: PanelRightClose,
-    difficulties: ['advanced']
   },
   {
     value: 'programming',
     label: 'Programming',
     icon: Code,
-    difficulties: ['beginner', 'intermediate', 'advanced']
   },
   {
     value: 'games',
     label: 'Games',
     icon: Gamepad2,
-    difficulties: ['beginner', 'intermediate', 'advanced']
   }
 ];
 
@@ -61,30 +55,39 @@ export const TypingSidebar: React.FC = () => {
   const { lessons, selectLesson, currentLesson, selectedLanguage } = useTyping();
   const [activeTab, setActiveTab] = useState<string>('beginner');
   
-  // Filter lessons by active tab
-  const getFilteredLessons = () => {
-    if (activeTab === 'programming') {
-      return lessons.filter(lesson => lesson.category === 'Programming');
-    } else if (activeTab === 'games') {
-      return lessons.filter(lesson => lesson.category === 'Games');
-    } else {
-      return lessons.filter(lesson => lesson.difficulty === activeTab);
+  // Group lessons by category and difficulty
+  const groupedLessons = lessons.reduce<Record<string, Record<string, Lesson[]>>>((acc, lesson) => {
+    if (!acc[lesson.category]) {
+      acc[lesson.category] = {};
+    }
+    
+    if (!acc[lesson.category][lesson.difficulty]) {
+      acc[lesson.category][lesson.difficulty] = [];
+    }
+    
+    acc[lesson.category][lesson.difficulty].push(lesson);
+    return acc;
+  }, {});
+  
+  // Scroll to section when tab is clicked
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
-  
-  // Group lessons by category within the active tab
-  const getGroupedLessons = (filteredLessons: Lesson[]) => {
-    return filteredLessons.reduce<Record<string, Lesson[]>>((acc, lesson) => {
-      if (!acc[lesson.category]) {
-        acc[lesson.category] = [];
+
+  // Set first lesson as current if none selected
+  useEffect(() => {
+    if (!currentLesson && lessons.length > 0) {
+      const beginnerLessons = lessons.filter(
+        lesson => lesson.difficulty === 'beginner'
+      );
+      if (beginnerLessons.length > 0) {
+        selectLesson(beginnerLessons[0]);
       }
-      acc[lesson.category].push(lesson);
-      return acc;
-    }, {});
-  };
-  
-  const filteredLessons = getFilteredLessons();
-  const groupedLessons = getGroupedLessons(filteredLessons);
+    }
+  }, [lessons, currentLesson, selectLesson]);
 
   return (
     <Sidebar>
@@ -97,7 +100,10 @@ export const TypingSidebar: React.FC = () => {
       </SidebarHeader>
       
       <SidebarContent className="h-[calc(100vh-120px)]">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full px-2 mb-2">
+        <Tabs value={activeTab} onValueChange={(value) => {
+          setActiveTab(value);
+          scrollToSection(value);
+        }} className="w-full px-2 mb-2">
           <TabsList className="flex w-full justify-between">
             {categoryTabs.map((tab) => (
               <TabsTrigger 
@@ -112,41 +118,188 @@ export const TypingSidebar: React.FC = () => {
           </TabsList>
         </Tabs>
         
-        {Object.entries(groupedLessons).length === 0 ? (
-          <div className="px-4 py-6 text-center text-sm text-sidebar-foreground/70">
-            No lessons found in this category.
-          </div>
-        ) : (
-          Object.entries(groupedLessons).map(([category, categoryLessons]) => (
-            <SidebarGroup key={category}>
-              <SidebarGroupLabel className="flex items-center gap-2">
-                {category === 'Games' ? <Gamepad2 className="h-4 w-4" /> : 
-                 category === 'Programming' ? <Code className="h-4 w-4" /> : 
-                 category === 'Words' ? <BookOpen className="h-4 w-4" /> : 
-                 <Keyboard className="h-4 w-4" />}
-                {category}
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {categoryLessons.map((lesson) => (
-                    <SidebarMenuItem key={lesson.id}>
-                      <SidebarMenuButton
-                        onClick={() => selectLesson(lesson)}
-                        className={
-                          currentLesson?.id === lesson.id
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                            : ""
-                        }
-                      >
-                        <span className="text-sm">{lesson.title}</span>
-                      </SidebarMenuButton>
+        {/* Beginner Section */}
+        <div id="beginner">
+          <SidebarGroup>
+            <SidebarGroupLabel className="flex items-center gap-2 bg-muted/50 sticky top-0 z-10">
+              <BookOpen className="h-4 w-4" />
+              Beginner Lessons
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              {Object.entries(groupedLessons)
+                .filter(([_, difficultyGroups]) => 'beginner' in difficultyGroups)
+                .map(([category, difficultyGroups]) => (
+                  <SidebarMenu key={`${category}-beginner`}>
+                    <SidebarMenuItem>
+                      <div className="text-xs font-medium py-1 px-2 text-muted-foreground">{category}</div>
                     </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))
-        )}
+                    {difficultyGroups['beginner'].map((lesson) => (
+                      <SidebarMenuItem key={lesson.id}>
+                        <SidebarMenuButton
+                          onClick={() => selectLesson(lesson)}
+                          className={
+                            currentLesson?.id === lesson.id
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : ""
+                          }
+                        >
+                          <span className="text-sm">{lesson.title}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                ))}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
+        
+        {/* Intermediate Section */}
+        <div id="intermediate">
+          <SidebarGroup>
+            <SidebarGroupLabel className="flex items-center gap-2 bg-muted/50 sticky top-0 z-10">
+              <Award className="h-4 w-4" />
+              Intermediate Lessons
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              {Object.entries(groupedLessons)
+                .filter(([_, difficultyGroups]) => 'intermediate' in difficultyGroups)
+                .map(([category, difficultyGroups]) => (
+                  <SidebarMenu key={`${category}-intermediate`}>
+                    <SidebarMenuItem>
+                      <div className="text-xs font-medium py-1 px-2 text-muted-foreground">{category}</div>
+                    </SidebarMenuItem>
+                    {difficultyGroups['intermediate'].map((lesson) => (
+                      <SidebarMenuItem key={lesson.id}>
+                        <SidebarMenuButton
+                          onClick={() => selectLesson(lesson)}
+                          className={
+                            currentLesson?.id === lesson.id
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : ""
+                          }
+                        >
+                          <span className="text-sm">{lesson.title}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                ))}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
+        
+        {/* Advanced Section */}
+        <div id="advanced">
+          <SidebarGroup>
+            <SidebarGroupLabel className="flex items-center gap-2 bg-muted/50 sticky top-0 z-10">
+              <PanelRightClose className="h-4 w-4" />
+              Advanced Lessons
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              {Object.entries(groupedLessons)
+                .filter(([_, difficultyGroups]) => 'advanced' in difficultyGroups)
+                .map(([category, difficultyGroups]) => (
+                  <SidebarMenu key={`${category}-advanced`}>
+                    <SidebarMenuItem>
+                      <div className="text-xs font-medium py-1 px-2 text-muted-foreground">{category}</div>
+                    </SidebarMenuItem>
+                    {difficultyGroups['advanced'].map((lesson) => (
+                      <SidebarMenuItem key={lesson.id}>
+                        <SidebarMenuButton
+                          onClick={() => selectLesson(lesson)}
+                          className={
+                            currentLesson?.id === lesson.id
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : ""
+                          }
+                        >
+                          <span className="text-sm">{lesson.title}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                ))}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
+        
+        {/* Programming Section */}
+        <div id="programming">
+          <SidebarGroup>
+            <SidebarGroupLabel className="flex items-center gap-2 bg-muted/50 sticky top-0 z-10">
+              <Code className="h-4 w-4" />
+              Programming Lessons
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              {Object.entries(groupedLessons)
+                .filter(([category]) => category === 'Programming')
+                .map(([category, difficultyGroups]) => (
+                  Object.entries(difficultyGroups).map(([difficulty, lessons]) => (
+                    <SidebarMenu key={`${category}-${difficulty}`}>
+                      <SidebarMenuItem>
+                        <div className="text-xs font-medium py-1 px-2 text-muted-foreground">
+                          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                        </div>
+                      </SidebarMenuItem>
+                      {lessons.map((lesson) => (
+                        <SidebarMenuItem key={lesson.id}>
+                          <SidebarMenuButton
+                            onClick={() => selectLesson(lesson)}
+                            className={
+                              currentLesson?.id === lesson.id
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                : ""
+                            }
+                          >
+                            <span className="text-sm">{lesson.title}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  ))
+                ))}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
+        
+        {/* Games Section */}
+        <div id="games">
+          <SidebarGroup>
+            <SidebarGroupLabel className="flex items-center gap-2 bg-muted/50 sticky top-0 z-10">
+              <Gamepad2 className="h-4 w-4" />
+              Games Lessons
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              {Object.entries(groupedLessons)
+                .filter(([category]) => category === 'Games')
+                .map(([category, difficultyGroups]) => (
+                  Object.entries(difficultyGroups).map(([difficulty, lessons]) => (
+                    <SidebarMenu key={`${category}-${difficulty}`}>
+                      <SidebarMenuItem>
+                        <div className="text-xs font-medium py-1 px-2 text-muted-foreground">
+                          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                        </div>
+                      </SidebarMenuItem>
+                      {lessons.map((lesson) => (
+                        <SidebarMenuItem key={lesson.id}>
+                          <SidebarMenuButton
+                            onClick={() => selectLesson(lesson)}
+                            className={
+                              currentLesson?.id === lesson.id
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                : ""
+                            }
+                          >
+                            <span className="text-sm">{lesson.title}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  ))
+                ))}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
       </SidebarContent>
       
       <SidebarFooter className="px-2 py-2">
