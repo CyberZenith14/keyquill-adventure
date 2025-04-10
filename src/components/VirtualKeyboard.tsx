@@ -46,7 +46,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) =
   const keyboardLayout = selectedLanguage === 'english' ? englishKeyboardLayout : hindiKeyboardLayout;
   
   return (
-    <div className={cn("p-2 rounded-lg", className)}>
+    <div className={cn("p-2 rounded-lg shadow-sm", className)}>
       <div className="flex flex-col items-center gap-1">
         {keyboardLayout.map((row, rowIndex) => (
           <div key={rowIndex} className="flex gap-1">
@@ -60,11 +60,12 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) =
               const isActive = currentKey?.toLowerCase() === key.toLowerCase();
               
               // Determine if this key has been correctly or incorrectly typed
-              const keyIndex = typingText.toLowerCase().indexOf(key.toLowerCase(), 0);
-              let keyStatus = null;
-              if (keyIndex !== -1 && keyIndex < currentPosition) {
-                keyStatus = typedCharacters[keyIndex];
-              }
+              const keyStatus = typingText.toLowerCase().split('').map((char, i) => {
+                if (char === key.toLowerCase() && i < currentPosition) {
+                  return typedCharacters[i];
+                }
+                return null;
+              }).find(status => status !== null);
               
               const keyWidth = keyWidths[key] || 'w-10';
               
@@ -72,8 +73,9 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) =
                 <div
                   key={key}
                   className={cn(
-                    "keyboard-key h-10 flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+                    "keyboard-key h-10 flex items-center justify-center rounded-md text-sm font-medium",
                     keyWidth,
+                    isActive && "border-primary shadow-sm",
                     isActive && "keyboard-key-active bg-primary/20 border-primary",
                     keyStatus === 'correct' && "bg-green-500/20 text-green-700 border-green-500",
                     keyStatus === 'incorrect' && "bg-red-500/20 text-red-700 border-red-500"

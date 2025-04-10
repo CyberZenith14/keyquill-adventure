@@ -116,6 +116,10 @@
   }
   
   .hand-finger {
-    @apply stroke-2 transition-all duration-200;
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  .hand-svg {
+    @apply drop-shadow-sm;
   }
 }
