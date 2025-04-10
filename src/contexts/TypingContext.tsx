@@ -76,12 +76,168 @@ export const hindiKeyboardMap: Record<string, string> = {
   // And other characters...
 };
 
-// Lesson data with categories
+// Enhanced Lesson data with more structured progression
 const englishLessons: Lesson[] = [
-  // Beginner lessons
+  // Hand position lesson
+  {
+    id: 'en-pos',
+    title: 'Hand Position Guide',
+    content: 'Place your left fingers on ASDF and right fingers on JKL;. This is the home row position. Each finger rests on its assigned key. Your thumbs rest on the space bar.',
+    category: 'Basics',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  
+  // Home Row Lessons - Progression
+  {
+    id: 'en-hr1',
+    title: 'Home Row - 2 Keys',
+    content: 'asdf jkl; as as df df jk jk l; l; aj aj sk sk dl dl f; f;',
+    category: 'Home Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-hr2',
+    title: 'Home Row - 3 Keys',
+    content: 'asd asd fds fds jkl jkl ;lk ;lk asd jkl asd jkl fds ;lk fds ;lk',
+    category: 'Home Row', 
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-hr3',
+    title: 'Home Row - 4 Keys',
+    content: 'asdf asdf jkl; jkl; asdf jkl; fdsa ;lkj asdf jkl; fdsa ;lkj',
+    category: 'Home Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-hr4',
+    title: 'Home Row - Words',
+    content: 'a sad fall; a lad; a salad; a flask; all ask; a jaskal; a salsa; a jak;',
+    category: 'Home Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  
+  // Top Row Lessons
+  {
+    id: 'en-tr1',
+    title: 'Top Row - 2 Keys',
+    content: 'qw qw er er ty ty ui ui op op qw er ty ui op',
+    category: 'Top Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-tr2',
+    title: 'Top Row - 3 Keys',
+    content: 'qwe qwe rty rty uio uio qwe rty uio poi poi',
+    category: 'Top Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-tr3',
+    title: 'Top Row - 4 Keys',
+    content: 'qwer qwer tyui tyui tyui qwer opiu opiu qwer tyui',
+    category: 'Top Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-tr4',
+    title: 'Top Row - Words',
+    content: 'quiet type worker equip pour query write riot trip power',
+    category: 'Top Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  
+  // Bottom Row Lessons
+  {
+    id: 'en-br1',
+    title: 'Bottom Row - 2 Keys',
+    content: 'zx zx cv cv bn bn m, m, ./ ./ zx cv bn m, ./',
+    category: 'Bottom Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-br2',
+    title: 'Bottom Row - 3 Keys',
+    content: 'zxc zxc vbn vbn m,. m,. zxc vbn m,. ./,',
+    category: 'Bottom Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-br3',
+    title: 'Bottom Row - 4 Keys',
+    content: 'zxcv zxcv bnm, bnm, ./, ./, zxcv bnm, ./',
+    category: 'Bottom Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  {
+    id: 'en-br4',
+    title: 'Bottom Row - Words',
+    content: 'zinc box cave vibe xylophone buzz mix calm zebra voyage',
+    category: 'Bottom Row',
+    difficulty: 'beginner',
+    language: 'english'
+  },
+  
+  // Combined Row Lessons
+  {
+    id: 'en-c1',
+    title: 'Home + Top Rows',
+    content: 'father quick waste jolly poised update reward strike',
+    category: 'Combined',
+    difficulty: 'intermediate',
+    language: 'english'
+  },
+  {
+    id: 'en-c2',
+    title: 'Home + Bottom Rows',
+    content: 'baffle jazz calm send vase milk dance fizzle',
+    category: 'Combined',
+    difficulty: 'intermediate',
+    language: 'english'
+  },
+  {
+    id: 'en-c3',
+    title: 'All Rows Mixed',
+    content: 'waxy quizzical jumps vibrate properly zone exotic',
+    category: 'Combined',
+    difficulty: 'intermediate',
+    language: 'english'
+  },
+
+  // Numbers Row
+  {
+    id: 'en-n1',
+    title: 'Numbers Row - 2 Keys',
+    content: '12 12 34 34 56 56 78 78 90 90 12 34 56 78 90',
+    category: 'Numbers',
+    difficulty: 'intermediate',
+    language: 'english'
+  },
+  {
+    id: 'en-n2',
+    title: 'Numbers Row - 3 Keys',
+    content: '123 123 456 456 789 789 890 890 123 456 789',
+    category: 'Numbers',
+    difficulty: 'intermediate',
+    language: 'english'
+  },
+  
+  // Original Lessons with slight modifications
   {
     id: 'en-b1',
-    title: 'Home Row Keys',
+    title: 'Home Row Basics',
     content: 'asdf jkl; asdf jkl; asdf jkl; asdf jkl;',
     category: 'Basics',
     difficulty: 'beginner',
@@ -89,7 +245,7 @@ const englishLessons: Lesson[] = [
   },
   {
     id: 'en-b2',
-    title: 'Top Row Keys',
+    title: 'Top Row Basics',
     content: 'qwer tyui qwer tyui qwer tyui qwer tyui',
     category: 'Basics',
     difficulty: 'beginner',
@@ -97,7 +253,7 @@ const englishLessons: Lesson[] = [
   },
   {
     id: 'en-b3',
-    title: 'Bottom Row Keys',
+    title: 'Bottom Row Basics',
     content: 'zxcv bnm, zxcv bnm, zxcv bnm, zxcv bnm,',
     category: 'Basics',
     difficulty: 'beginner',
@@ -105,12 +261,14 @@ const englishLessons: Lesson[] = [
   },
   {
     id: 'en-b4',
-    title: 'Numbers Row',
+    title: 'Numbers Row Basics',
     content: '1234 5678 1234 5678 1234 5678 1234 5678',
     category: 'Basics',
     difficulty: 'beginner',
     language: 'english'
   },
+  
+  // More advanced lessons
   {
     id: 'en-b5',
     title: 'Common Words',
@@ -170,6 +328,30 @@ const englishLessons: Lesson[] = [
     language: 'english'
   },
   {
+    id: 'en-p1',
+    title: 'HTML Elements',
+    content: '<div class="container"><h1>Hello World</h1><p>This is a paragraph.</p></div>',
+    category: 'Programming',
+    difficulty: 'advanced',
+    language: 'english'
+  },
+  {
+    id: 'en-p2',
+    title: 'CSS Syntax',
+    content: '.container { display: flex; justify-content: center; margin: 0 auto; width: 100%; }',
+    category: 'Programming',
+    difficulty: 'advanced',
+    language: 'english'
+  },
+  {
+    id: 'en-p3',
+    title: 'JavaScript Functions',
+    content: 'const calculateWPM = (typedChars, timeInMinutes) => { return (typedChars / 5) / timeInMinutes; }',
+    category: 'Programming',
+    difficulty: 'advanced',
+    language: 'english'
+  },
+  {
     id: 'en-g1',
     title: 'Typing Race',
     content: 'Ready, set, go! Type as fast as you can to win the race!',
@@ -179,12 +361,48 @@ const englishLessons: Lesson[] = [
   }
 ];
 
-// Hindi lessons
+// Enhanced Hindi lessons
 const hindiLessons: Lesson[] = [
-  // Beginner lessons
+  // Hand position lesson for Hindi
+  {
+    id: 'hi-pos',
+    title: 'हिंदी हाथ स्थिति गाइड',
+    content: 'अपनी बाईं उंगलियों को कमल और दाईं उंगलियों को जगत पर रखें। यह होम रो स्थिति है।',
+    category: 'Basics',
+    difficulty: 'beginner',
+    language: 'hindi'
+  },
+  
+  // Home Row Lessons for Hindi - Progression
+  {
+    id: 'hi-hr1',
+    title: 'होम रो - 2 कीज़',
+    content: 'कम कम जग जग कम जग कम जग',
+    category: 'Home Row',
+    difficulty: 'beginner',
+    language: 'hindi'
+  },
+  {
+    id: 'hi-hr2',
+    title: 'होम रो - 3 कीज़',
+    content: 'कमल कमल जगत जगत कमल जगत कमल जगत',
+    category: 'Home Row', 
+    difficulty: 'beginner',
+    language: 'hindi'
+  },
+  {
+    id: 'hi-hr3',
+    title: 'होम रो - शब्द',
+    content: 'कमल मगर जग तक लग मत रत जल कर',
+    category: 'Home Row',
+    difficulty: 'beginner',
+    language: 'hindi'
+  },
+  
+  // Original Hindi lessons with slight modifications
   {
     id: 'hi-b1',
-    title: 'Hindi Home Row',
+    title: 'हिंदी होम रो',
     content: 'कमल जगत कमल जगत कमल जगत कमल जगत',
     category: 'Basics',
     difficulty: 'beginner',
@@ -192,7 +410,7 @@ const hindiLessons: Lesson[] = [
   },
   {
     id: 'hi-b2',
-    title: 'Hindi Vowels',
+    title: 'हिंदी स्वर',
     content: 'अ आ इ ई उ ऊ ए ऐ ओ औ अं अः',
     category: 'Basics',
     difficulty: 'beginner',
@@ -200,7 +418,7 @@ const hindiLessons: Lesson[] = [
   },
   {
     id: 'hi-b3',
-    title: 'Hindi Consonants',
+    title: 'हिंदी व्यंजन',
     content: 'क ख ग घ ङ च छ ज झ ञ ट ठ',
     category: 'Basics',
     difficulty: 'beginner',
@@ -208,7 +426,7 @@ const hindiLessons: Lesson[] = [
   },
   {
     id: 'hi-b4',
-    title: 'Simple Hindi Words',
+    title: 'सरल हिंदी शब्द',
     content: 'नमस्ते धन्यवाद शुभ प्रभात',
     category: 'Words',
     difficulty: 'beginner',
@@ -217,7 +435,7 @@ const hindiLessons: Lesson[] = [
   // Intermediate lessons
   {
     id: 'hi-i1',
-    title: 'Hindi Phrases',
+    title: 'हिंदी वाक्यांश',
     content: 'आपका दिन शुभ हो। मैं ठीक हूँ। आप कैसे हैं?',
     category: 'Words',
     difficulty: 'intermediate',
@@ -225,7 +443,7 @@ const hindiLessons: Lesson[] = [
   },
   {
     id: 'hi-i2',
-    title: 'Hindi Sentences',
+    title: 'हिंदी वाक्य',
     content: 'हिंदी एक बहुत सुंदर भाषा है। टाइपिंग अभ्यास करना महत्वपूर्ण है।',
     category: 'Words',
     difficulty: 'intermediate',
@@ -234,7 +452,7 @@ const hindiLessons: Lesson[] = [
   // Advanced lessons
   {
     id: 'hi-a1',
-    title: 'Complex Hindi Text',
+    title: 'जटिल हिंदी पाठ',
     content: 'आज का दिन बहुत अच्छा है। मैं बाहर जाकर टहलना चाहता हूँ। क्या आप मेरे साथ चलेंगे?',
     category: 'Words',
     difficulty: 'advanced',
@@ -314,11 +532,19 @@ export const TypingProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [typingText]);
 
   const startGame = useCallback(() => {
-    if (!currentLesson) return;
-    resetPractice();
+    if (!currentLesson) {
+      // If no lesson is selected, start with the first lesson of the current language
+      const firstLesson = lessons.find(lesson => lesson.language === selectedLanguage);
+      if (firstLesson) {
+        setCurrentLesson(firstLesson);
+        setTypingText(firstLesson.content);
+        setTypedCharacters(Array(firstLesson.content.length).fill('untyped'));
+      }
+    }
+    
     setIsTypingStarted(true);
     setStartTime(Date.now());
-  }, [currentLesson, resetPractice]);
+  }, [currentLesson, lessons, selectedLanguage]);
 
   // Update typed characters and progress
   useEffect(() => {
@@ -350,6 +576,19 @@ export const TypingProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Check if typing is complete
     if (userInput.length >= typingText.length) {
       setIsTypingComplete(true);
+      
+      // Move to next lesson automatically after a short delay
+      const timeoutId = setTimeout(() => {
+        const currentIndex = lessons.findIndex(lesson => lesson.id === currentLesson?.id);
+        if (currentIndex >= 0 && currentIndex < lessons.length - 1) {
+          const nextLesson = lessons[currentIndex + 1];
+          selectLesson(nextLesson);
+          setIsTypingStarted(true);
+          setStartTime(Date.now());
+        }
+      }, 1500);
+      
+      return () => clearTimeout(timeoutId);
     }
 
     // Calculate stats
@@ -365,7 +604,7 @@ export const TypingProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         elapsedTime: timeElapsed
       });
     }
-  }, [userInput, typingText, typedCharacters, isTypingStarted, isTypingComplete, startTime]);
+  }, [userInput, typingText, typedCharacters, isTypingStarted, isTypingComplete, startTime, currentLesson, lessons, selectLesson]);
 
   const contextValue = {
     lessons,

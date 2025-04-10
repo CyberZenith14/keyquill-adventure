@@ -104,7 +104,6 @@ export const TypingPractice: React.FC = () => {
               <Button 
                 onClick={startGame}
                 className="flex items-center gap-2"
-                disabled={!currentLesson}
               >
                 <PlayCircle className="h-4 w-4" />
                 {isTypingComplete ? 'Try Again' : 'Start Typing'}
@@ -138,8 +137,19 @@ export const TypingPractice: React.FC = () => {
             {!isTypingStarted && !isTypingComplete ? (
               <div className="text-center p-8">
                 <p className="text-muted-foreground mb-4">
-                  Click "Start Typing" to begin the lesson.
+                  {currentLesson 
+                    ? "Click \"Start Typing\" to begin the lesson."
+                    : "Select a lesson from the sidebar or click \"Start Typing\" to begin with the first lesson."}
                 </p>
+                {!currentLesson && (
+                  <div className="mb-4 bg-primary/5 p-4 rounded-lg border border-primary/10">
+                    <h3 className="font-medium mb-2">Hand Position Guide</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Place your left fingers on ASDF and right fingers on JKL; keys. This is the home row position.
+                      Each finger is responsible for specific keys on the keyboard.
+                    </p>
+                  </div>
+                )}
                 <p className="text-sm text-muted-foreground">
                   Keep your fingers on the home row (ASDF JKL;) and try to type without looking at the keyboard.
                 </p>
