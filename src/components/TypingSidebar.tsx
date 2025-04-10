@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   Sidebar,
@@ -51,7 +50,7 @@ const categoryTabs: CategoryTab[] = [
   }
 ];
 
-export const TypingSidebar: React.FC = () => {
+export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode = false }) => {
   const { lessons, selectLesson, currentLesson, selectedLanguage } = useTyping();
   const [activeTab, setActiveTab] = useState<string>('beginner');
   
@@ -89,9 +88,10 @@ export const TypingSidebar: React.FC = () => {
     }
   }, [lessons, currentLesson, selectLesson]);
 
-  return (
-    <Sidebar>
-      <SidebarHeader className="flex items-center gap-2 px-2">
+  // Content for sidebar that works in both normal and drawer mode
+  const SidebarContents = () => (
+    <>
+      <SidebarHeader className={`flex items-center gap-2 px-2 ${drawerMode ? 'hidden' : ''}`}>
         <Keyboard className="h-6 w-6" />
         <span className="font-bold text-lg">KeyQuill</span>
         <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full ml-auto">
@@ -99,7 +99,7 @@ export const TypingSidebar: React.FC = () => {
         </span>
       </SidebarHeader>
       
-      <SidebarContent className="h-[calc(100vh-120px)]">
+      <SidebarContent className={drawerMode ? "h-full" : "h-[calc(100vh-120px)]"}>
         <Tabs value={activeTab} onValueChange={(value) => {
           setActiveTab(value);
           scrollToSection(value);
@@ -302,7 +302,7 @@ export const TypingSidebar: React.FC = () => {
         </div>
       </SidebarContent>
       
-      <SidebarFooter className="px-2 py-2">
+      <SidebarFooter className={`px-2 py-2 ${drawerMode ? 'hidden' : ''}`}>
         <div className="flex items-center text-xs text-sidebar-foreground/80 justify-between">
           <span>KeyQuill - Version 1.0</span>
           <a 
@@ -316,6 +316,18 @@ export const TypingSidebar: React.FC = () => {
           </a>
         </div>
       </SidebarFooter>
+    </>
+  );
+
+  // If in drawer mode, just return the contents without the Sidebar wrapper
+  if (drawerMode) {
+    return <SidebarContents />;
+  }
+
+  // Normal sidebar for larger screens
+  return (
+    <Sidebar>
+      <SidebarContents />
     </Sidebar>
   );
 };

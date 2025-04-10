@@ -4,6 +4,7 @@ import { TypingSidebar } from '@/components/TypingSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Outlet } from 'react-router-dom';
 import { TypingProvider } from '@/contexts/TypingContext';
+import { MobileSidebar } from '@/components/MobileSidebar';
 
 export const Layout: React.FC = () => {
   return (
@@ -13,7 +14,8 @@ export const Layout: React.FC = () => {
           <TypingSidebar />
           <div className="flex-1 flex flex-col overflow-hidden">
             <header className="h-14 border-b bg-card flex items-center px-4 lg:px-6">
-              <SidebarTrigger className="lg:hidden" />
+              <SidebarTrigger className="lg:hidden mr-2" />
+              <MobileSidebar />
               <div className="ml-auto flex items-center gap-2">
                 <a
                   href="https://github.com"
