@@ -2,6 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useTyping, fingerMap, hindiKeyboardMap } from '@/contexts/TypingContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface VirtualKeyboardProps {
   activeKey?: string | null;
@@ -41,12 +42,16 @@ const keyWidths: Record<string, string> = {
 
 export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) => {
   const { currentKey, typedCharacters, typingText, currentPosition, selectedLanguage } = useTyping();
+  const isMobile = useIsMobile();
   
   // Determine which keyboard layout to use
   const keyboardLayout = selectedLanguage === 'english' ? englishKeyboardLayout : hindiKeyboardLayout;
   
+  // Check if the current key is uppercase (so we should highlight Shift)
+  const isCapitalLetter = currentKey && currentKey === currentKey.toUpperCase() && currentKey.toLowerCase() !== currentKey;
+  
   return (
-    <div className={cn("p-2 rounded-lg shadow-sm", className)}>
+    <div className={cn("p-2 rounded-lg shadow-sm", className, isMobile ? "scale-75 origin-top" : "")}>
       <div className="flex flex-col items-center gap-1">
         {keyboardLayout.map((row, rowIndex) => (
           <div key={rowIndex} className="flex gap-1">
@@ -58,6 +63,10 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) =
               
               // Determine if this key is active (currently to be typed)
               const isActive = currentKey?.toLowerCase() === key.toLowerCase();
+              
+              // Special case for Shift key - highlight if current key is uppercase
+              const isShiftKey = key === 'Shift';
+              const isShiftActive = isShiftKey && isCapitalLetter;
               
               // Determine if this key has been correctly or incorrectly typed
               const keyStatus = typingText.toLowerCase().split('').map((char, i) => {
@@ -77,6 +86,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) =
                     keyWidth,
                     isActive && "border-primary shadow-sm",
                     isActive && "keyboard-key-active bg-primary/20 border-primary",
+                    isShiftActive && "keyboard-key-active bg-primary/20 border-primary",
                     keyStatus === 'correct' && "bg-green-500/20 text-green-700 border-green-500",
                     keyStatus === 'incorrect' && "bg-red-500/20 text-red-700 border-red-500"
                   )}
