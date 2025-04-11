@@ -1,17 +1,19 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTyping } from '@/contexts/TypingContext';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { PlayCircle, RefreshCw } from 'lucide-react';
+import { PlayCircle, RefreshCw, Repeat, Volume2, VolumeX } from 'lucide-react';
 import { VirtualKeyboard } from './VirtualKeyboard';
 import { HandVisualizer } from './HandVisualizer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useToast } from '@/hooks/use-toast';
 
 export const TypingPractice: React.FC = () => {
+  const { toast } = useToast();
   const { 
     typingText, 
     userInput, 
@@ -25,10 +27,14 @@ export const TypingPractice: React.FC = () => {
     resetPractice,
     startGame,
     selectedLanguage,
-    setSelectedLanguage
+    setSelectedLanguage,
+    loadNextLesson
   } = useTyping();
   
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [autoAdvance, setAutoAdvance] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const keyPressAudioRef = useRef<HTMLAudioElement | null>(null);
   const isMobile = useIsMobile();
   const isFirstLesson = currentLesson?.id === 'en-pos' || currentLesson?.id === 'hi-pos' || (!currentLesson && true);
 
@@ -38,9 +44,58 @@ export const TypingPractice: React.FC = () => {
     }
   }, [isTypingStarted]);
 
+  useEffect(() => {
+    // Create audio element for key press sounds
+    const audio = new Audio('/keypress.mp3');
+    audio.volume = 0.3;
+    keyPressAudioRef.current = audio;
+    
+    return () => {
+      keyPressAudioRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    // Auto-advance to next lesson when typing is complete
+    if (isTypingComplete && autoAdvance) {
+      const timer = setTimeout(() => {
+        loadNextLesson();
+        toast({
+          title: "Lesson completed!",
+          description: "Moving to the next lesson...",
+        });
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isTypingComplete, autoAdvance, loadNextLesson, toast]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isTypingStarted) return;
+    
+    // Play sound effect if enabled
+    if (soundEnabled && keyPressAudioRef.current) {
+      const audioClone = keyPressAudioRef.current.cloneNode() as HTMLAudioElement;
+      audioClone.play().catch(err => console.error("Error playing sound:", err));
+    }
+    
     setUserInput(e.target.value);
+  };
+
+  const toggleSound = () => {
+    setSoundEnabled(prev => !prev);
+    toast({
+      title: `Sound ${soundEnabled ? 'disabled' : 'enabled'}`,
+      description: `Typing sounds are now ${soundEnabled ? 'off' : 'on'}.`,
+    });
+  };
+
+  const toggleAutoAdvance = () => {
+    setAutoAdvance(prev => !prev);
+    toast({
+      title: `Auto advance ${autoAdvance ? 'disabled' : 'enabled'}`,
+      description: `Lessons will ${autoAdvance ? 'not' : 'now'} advance automatically.`,
+    });
   };
 
   const renderTypingText = () => {
@@ -93,6 +148,26 @@ export const TypingPractice: React.FC = () => {
                 <SelectItem value="hindi">Hindi</SelectItem>
               </SelectContent>
             </Select>
+
+            <Button
+              variant="outline" 
+              size={isMobile ? "sm" : "default"}
+              onClick={toggleSound}
+              className="flex items-center gap-2 h-9"
+            >
+              {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              {!isMobile && "Sound"}
+            </Button>
+            
+            <Button
+              variant="outline" 
+              size={isMobile ? "sm" : "default"}
+              onClick={toggleAutoAdvance}
+              className={`flex items-center gap-2 h-9 ${!autoAdvance ? "bg-primary/10" : ""}`}
+            >
+              <Repeat className="h-4 w-4" />
+              {!isMobile && "Repeat"}
+            </Button>
 
             {isTypingStarted ? (
               <Button 
@@ -155,7 +230,7 @@ export const TypingPractice: React.FC = () => {
                     </p>
                     <div className="flex justify-center">
                       <img 
-                        src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" 
+                        src="/keyboard-guide.jpg" 
                         alt="Keyboard with hand position" 
                         className="rounded-lg max-w-full h-auto mx-auto max-h-[220px] shadow-md" 
                       />

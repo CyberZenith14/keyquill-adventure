@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Sidebar,
@@ -12,7 +13,7 @@ import {
   SidebarMenuButton,
 } from '@/components/ui/sidebar';
 import { Lesson, useTyping } from '@/contexts/TypingContext';
-import { Keyboard, Award, BookOpen, Gamepad2, Github, PanelRightClose, Code } from 'lucide-react';
+import { Keyboard, Award, BookOpen, Gamepad2, Github, PanelRightClose, Code, FileText } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type CategoryTab = {
@@ -39,6 +40,11 @@ const categoryTabs: CategoryTab[] = [
     icon: PanelRightClose,
   },
   {
+    value: 'paragraphs',
+    label: 'Paragraphs',
+    icon: FileText,
+  },
+  {
     value: 'programming',
     label: 'Programming',
     icon: Code,
@@ -51,7 +57,7 @@ const categoryTabs: CategoryTab[] = [
 ];
 
 export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode = false }) => {
-  const { lessons, selectLesson, currentLesson, selectedLanguage } = useTyping();
+  const { lessons, selectLesson, currentLesson, selectedLanguage, isTypingStarted } = useTyping();
   const [activeTab, setActiveTab] = useState<string>('beginner');
   
   // Group lessons by category and difficulty
@@ -87,6 +93,17 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
       }
     }
   }, [lessons, currentLesson, selectLesson]);
+
+  // Handle lesson selection with confirmation if typing is in progress
+  const handleLessonSelect = (lesson: Lesson) => {
+    if (isTypingStarted) {
+      if (window.confirm('Are you sure you want to switch lessons? Current progress will be lost.')) {
+        selectLesson(lesson);
+      }
+    } else {
+      selectLesson(lesson);
+    }
+  };
 
   // Content for sidebar that works in both normal and drawer mode
   const SidebarContents = () => (
@@ -136,7 +153,7 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
                     {difficultyGroups['beginner'].map((lesson) => (
                       <SidebarMenuItem key={lesson.id}>
                         <SidebarMenuButton
-                          onClick={() => selectLesson(lesson)}
+                          onClick={() => handleLessonSelect(lesson)}
                           className={
                             currentLesson?.id === lesson.id
                               ? "bg-sidebar-accent text-sidebar-accent-foreground"
@@ -171,7 +188,7 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
                     {difficultyGroups['intermediate'].map((lesson) => (
                       <SidebarMenuItem key={lesson.id}>
                         <SidebarMenuButton
-                          onClick={() => selectLesson(lesson)}
+                          onClick={() => handleLessonSelect(lesson)}
                           className={
                             currentLesson?.id === lesson.id
                               ? "bg-sidebar-accent text-sidebar-accent-foreground"
@@ -206,7 +223,7 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
                     {difficultyGroups['advanced'].map((lesson) => (
                       <SidebarMenuItem key={lesson.id}>
                         <SidebarMenuButton
-                          onClick={() => selectLesson(lesson)}
+                          onClick={() => handleLessonSelect(lesson)}
                           className={
                             currentLesson?.id === lesson.id
                               ? "bg-sidebar-accent text-sidebar-accent-foreground"
@@ -218,6 +235,45 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
                       </SidebarMenuItem>
                     ))}
                   </SidebarMenu>
+                ))}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
+        
+        {/* Paragraphs Section */}
+        <div id="paragraphs">
+          <SidebarGroup>
+            <SidebarGroupLabel className="flex items-center gap-2 bg-muted/50 sticky top-0 z-10">
+              <FileText className="h-4 w-4" />
+              Paragraph Practice
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              {Object.entries(groupedLessons)
+                .filter(([category]) => category === 'Paragraphs')
+                .map(([category, difficultyGroups]) => (
+                  Object.entries(difficultyGroups).map(([difficulty, lessons]) => (
+                    <SidebarMenu key={`${category}-${difficulty}`}>
+                      <SidebarMenuItem>
+                        <div className="text-xs font-medium py-1 px-2 text-muted-foreground">
+                          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                        </div>
+                      </SidebarMenuItem>
+                      {lessons.map((lesson) => (
+                        <SidebarMenuItem key={lesson.id}>
+                          <SidebarMenuButton
+                            onClick={() => handleLessonSelect(lesson)}
+                            className={
+                              currentLesson?.id === lesson.id
+                                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                : ""
+                            }
+                          >
+                            <span className="text-sm">{lesson.title}</span>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  ))
                 ))}
             </SidebarGroupContent>
           </SidebarGroup>
@@ -244,7 +300,7 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
                       {lessons.map((lesson) => (
                         <SidebarMenuItem key={lesson.id}>
                           <SidebarMenuButton
-                            onClick={() => selectLesson(lesson)}
+                            onClick={() => handleLessonSelect(lesson)}
                             className={
                               currentLesson?.id === lesson.id
                                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
@@ -283,7 +339,7 @@ export const TypingSidebar: React.FC<{ drawerMode?: boolean }> = ({ drawerMode =
                       {lessons.map((lesson) => (
                         <SidebarMenuItem key={lesson.id}>
                           <SidebarMenuButton
-                            onClick={() => selectLesson(lesson)}
+                            onClick={() => handleLessonSelect(lesson)}
                             className={
                               currentLesson?.id === lesson.id
                                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
