@@ -5,15 +5,18 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Outlet } from 'react-router-dom';
 import { TypingProvider } from '@/contexts/TypingContext';
 import { MobileSidebar } from '@/components/MobileSidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export const Layout: React.FC = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <TypingProvider>
       <SidebarProvider>
         <div className="min-h-screen flex w-full">
           <TypingSidebar />
           <div className="flex-1 flex flex-col overflow-hidden">
-            <header className="h-14 border-b bg-card flex items-center px-4 lg:px-6">
+            <header className="h-12 sm:h-14 border-b bg-card flex items-center px-3 sm:px-4 lg:px-6">
               <SidebarTrigger className="lg:hidden mr-2" />
               <MobileSidebar />
               <div className="ml-auto flex items-center gap-2">
@@ -21,7 +24,7 @@ export const Layout: React.FC = () => {
                   href="https://github.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm underline underline-offset-4 text-muted-foreground hover:text-foreground"
+                  className="text-xs sm:text-sm underline underline-offset-4 text-muted-foreground hover:text-foreground"
                 >
                   GitHub
                 </a>

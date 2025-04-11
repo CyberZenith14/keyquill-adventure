@@ -27,31 +27,49 @@ const hindiKeyboardLayout = [
   ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Fn', 'Ctrl']
 ];
 
+// Mobile optimized keyboard layouts (simplified)
+const mobileEnglishLayout = [
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+  ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace'],
+  ['123', ',', 'Space', '.', 'Enter']
+];
+
+const mobileHindiLayout = [
+  ['ौ', 'ै', 'ा', 'ी', 'ू', 'ब', 'ह', 'ग', 'द', 'ज'],
+  ['ो', 'े', '्', 'ि', 'ु', 'प', 'र', 'क', 'त', 'च'],
+  ['Shift', 'ॉ', 'ं', 'म', 'न', 'व', 'ल', 'स', 'Backspace'],
+  ['123', ',', 'Space', '.', 'Enter']
+];
+
 const keyWidths: Record<string, string> = {
-  'Backspace': 'w-16',
-  'Tab': 'w-16',
-  'Caps': 'w-16',
-  'Enter': 'w-16',
-  'Shift': 'w-20',
-  'Ctrl': 'w-12',
-  'Win': 'w-12',
-  'Alt': 'w-12',
-  'Space': 'w-64',
-  'Fn': 'w-12',
+  'Backspace': 'w-16 sm:w-16',
+  'Tab': 'w-16 sm:w-16',
+  'Caps': 'w-16 sm:w-16',
+  'Enter': 'w-16 sm:w-16',
+  'Shift': 'w-14 sm:w-20',
+  'Ctrl': 'w-12 sm:w-12',
+  'Win': 'w-12 sm:w-12',
+  'Alt': 'w-12 sm:w-12',
+  'Space': 'w-32 sm:w-64',
+  'Fn': 'w-12 sm:w-12',
+  '123': 'w-10',
 };
 
 export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) => {
   const { currentKey, typedCharacters, typingText, currentPosition, selectedLanguage } = useTyping();
   const isMobile = useIsMobile();
   
-  // Determine which keyboard layout to use
-  const keyboardLayout = selectedLanguage === 'english' ? englishKeyboardLayout : hindiKeyboardLayout;
+  // Determine which keyboard layout to use based on device and language
+  const keyboardLayout = isMobile 
+    ? (selectedLanguage === 'english' ? mobileEnglishLayout : mobileHindiLayout)
+    : (selectedLanguage === 'english' ? englishKeyboardLayout : hindiKeyboardLayout);
   
   // Check if the current key is uppercase (so we should highlight Shift)
   const isCapitalLetter = currentKey && currentKey === currentKey.toUpperCase() && currentKey.toLowerCase() !== currentKey;
   
   return (
-    <div className={cn("p-2 rounded-lg shadow-sm", className, isMobile ? "scale-75 origin-top" : "")}>
+    <div className={cn("p-2 rounded-lg shadow-sm", className, isMobile ? "scale-90 origin-top" : "")}>
       <div className="flex flex-col items-center gap-1">
         {keyboardLayout.map((row, rowIndex) => (
           <div key={rowIndex} className="flex gap-1">
@@ -76,14 +94,16 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ className }) =
                 return null;
               }).find(status => status !== null);
               
-              const keyWidth = keyWidths[key] || 'w-10';
+              const keyWidth = keyWidths[key] || (isMobile ? 'w-8' : 'w-10');
+              const keyHeight = isMobile ? 'h-9' : 'h-10';
               
               return (
                 <div
                   key={key}
                   className={cn(
-                    "keyboard-key h-10 flex items-center justify-center rounded-md text-sm font-medium",
+                    "keyboard-key flex items-center justify-center rounded-md text-sm font-medium",
                     keyWidth,
+                    keyHeight,
                     isActive && "border-primary shadow-sm",
                     isActive && "keyboard-key-active bg-primary/20 border-primary",
                     isShiftActive && "keyboard-key-active bg-primary/20 border-primary",

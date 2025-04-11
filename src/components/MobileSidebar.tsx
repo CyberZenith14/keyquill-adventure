@@ -11,17 +11,17 @@ export const MobileSidebar = () => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2 md:hidden">
+        <Button variant="outline" size="sm" className="flex items-center gap-2 md:hidden h-9">
           <Menu className="h-4 w-4" />
           <span>Lessons</span>
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-[calc(100dvh-3rem)] max-h-none p-0">
-        <div className="pt-6 pb-4 h-full overflow-hidden flex flex-col">
-          <div className="flex justify-between items-center px-6 pb-2">
+        <div className="pt-4 pb-4 h-full overflow-hidden flex flex-col">
+          <div className="flex justify-between items-center px-4 pb-2">
             <h2 className="text-lg font-semibold">Lessons</h2>
             <DrawerClose asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="h-8 w-8">
                 <X className="h-4 w-4" />
                 <span className="sr-only">Close</span>
               </Button>
