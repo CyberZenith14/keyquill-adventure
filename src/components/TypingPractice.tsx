@@ -30,7 +30,7 @@ export const TypingPractice: React.FC = () => {
   
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
-  const isFirstLesson = currentLesson?.id === 1 || (!currentLesson && true);
+  const isFirstLesson = currentLesson?.id === 'en-pos' || currentLesson?.id === 'hi-pos' || (!currentLesson && true);
 
   useEffect(() => {
     if (isTypingStarted && inputRef.current) {
