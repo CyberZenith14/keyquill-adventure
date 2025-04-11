@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 // Define the lesson structure
@@ -486,6 +485,7 @@ type TypingContextType = {
   resetPractice: () => void;
   startGame: () => void;
   setSelectedLanguage: (language: 'english' | 'hindi') => void;
+  loadNextLesson: () => void;
 };
 
 const TypingContext = createContext<TypingContextType | null>(null);
@@ -545,6 +545,19 @@ export const TypingProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setIsTypingStarted(true);
     setStartTime(Date.now());
   }, [currentLesson, lessons, selectedLanguage]);
+
+  // Add the loadNextLesson function implementation
+  const loadNextLesson = useCallback(() => {
+    if (!currentLesson) return;
+    
+    const currentIndex = lessons.findIndex(lesson => lesson.id === currentLesson.id);
+    if (currentIndex >= 0 && currentIndex < lessons.length - 1) {
+      const nextLesson = lessons[currentIndex + 1];
+      selectLesson(nextLesson);
+      setIsTypingStarted(true);
+      setStartTime(Date.now());
+    }
+  }, [currentLesson, lessons, selectLesson]);
 
   // Update typed characters and progress
   useEffect(() => {
@@ -622,7 +635,8 @@ export const TypingProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     selectLesson,
     resetPractice,
     startGame,
-    setSelectedLanguage
+    setSelectedLanguage,
+    loadNextLesson
   };
 
   return (
