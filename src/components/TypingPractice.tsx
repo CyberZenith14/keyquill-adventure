@@ -30,6 +30,7 @@ export const TypingPractice: React.FC = () => {
   
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
+  const isFirstLesson = currentLesson?.id === 1 || (!currentLesson && true);
 
   useEffect(() => {
     if (isTypingStarted && inputRef.current) {
@@ -145,13 +146,20 @@ export const TypingPractice: React.FC = () => {
                     ? "Click \"Start Typing\" to begin the lesson."
                     : "Select a lesson from the sidebar or click \"Start Typing\" to begin with the first lesson."}
                 </p>
-                {!currentLesson && (
+                {isFirstLesson && (
                   <div className="mb-4 bg-primary/5 p-3 sm:p-4 rounded-lg border border-primary/10">
                     <h3 className="font-medium mb-2 text-sm sm:text-base">Hand Position Guide</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-4">
                       Place your left fingers on ASDF and right fingers on JKL; keys. This is the home row position.
                       Each finger is responsible for specific keys on the keyboard.
                     </p>
+                    <div className="flex justify-center">
+                      <img 
+                        src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" 
+                        alt="Keyboard with hand position" 
+                        className="rounded-lg max-w-full h-auto mx-auto max-h-[220px] shadow-md" 
+                      />
+                    </div>
                   </div>
                 )}
                 <p className="text-xs sm:text-sm text-muted-foreground">
