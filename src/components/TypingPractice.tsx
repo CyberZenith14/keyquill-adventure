@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useTyping } from '@/contexts/TypingContext';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -57,25 +56,37 @@ export const TypingPractice: React.FC = () => {
 
   useEffect(() => {
     // Auto-advance to next lesson when typing is complete
-    if (isTypingComplete && autoAdvance) {
+    if (isTypingComplete) {
       const timer = setTimeout(() => {
-        loadNextLesson();
-        toast({
-          title: "Lesson completed!",
-          description: "Moving to the next lesson...",
-        });
+        if (autoAdvance) {
+          loadNextLesson();
+          toast({
+            title: "Lesson completed!",
+            description: "Moving to the next lesson...",
+          });
+        } else {
+          // Repeat the current lesson if autoAdvance is off
+          resetPractice();
+          startGame();
+          toast({
+            title: "Lesson repeating!",
+            description: "Starting the same lesson again...",
+          });
+        }
       }, 3000);
       
       return () => clearTimeout(timer);
     }
-  }, [isTypingComplete, autoAdvance, loadNextLesson, toast]);
+  }, [isTypingComplete, autoAdvance, loadNextLesson, resetPractice, startGame, toast]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isTypingStarted) return;
     
     // Play sound effect if enabled
     if (soundEnabled && keyPressAudioRef.current) {
-      const audioClone = keyPressAudioRef.current.cloneNode() as HTMLAudioElement;
+      // Create a new audio element for each keypress to allow overlapping sounds
+      const audioClone = new Audio('/keypress.mp3');
+      audioClone.volume = 0.3;
       audioClone.play().catch(err => console.error("Error playing sound:", err));
     }
     
@@ -84,6 +95,14 @@ export const TypingPractice: React.FC = () => {
 
   const toggleSound = () => {
     setSoundEnabled(prev => !prev);
+    
+    // Test sound when enabling
+    if (!soundEnabled && keyPressAudioRef.current) {
+      const testSound = new Audio('/keypress.mp3');
+      testSound.volume = 0.3;
+      testSound.play().catch(err => console.error("Error playing test sound:", err));
+    }
+    
     toast({
       title: `Sound ${soundEnabled ? 'disabled' : 'enabled'}`,
       description: `Typing sounds are now ${soundEnabled ? 'off' : 'on'}.`,
@@ -94,7 +113,7 @@ export const TypingPractice: React.FC = () => {
     setAutoAdvance(prev => !prev);
     toast({
       title: `Auto advance ${autoAdvance ? 'disabled' : 'enabled'}`,
-      description: `Lessons will ${autoAdvance ? 'not' : 'now'} advance automatically.`,
+      description: `Lessons will ${autoAdvance ? 'repeat' : 'advance automatically'}.`,
     });
   };
 
@@ -166,7 +185,7 @@ export const TypingPractice: React.FC = () => {
               className={`flex items-center gap-2 h-9 ${!autoAdvance ? "bg-primary/10" : ""}`}
             >
               <Repeat className="h-4 w-4" />
-              {!isMobile && "Repeat"}
+              {!isMobile && (autoAdvance ? "Next" : "Repeat")}
             </Button>
 
             {isTypingStarted ? (
